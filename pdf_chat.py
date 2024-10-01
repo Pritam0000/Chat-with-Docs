@@ -4,6 +4,7 @@ from sentence_transformers import SentenceTransformer, util
 import faiss
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 import torch
+from transformers import LlamaTokenizer, LlamaForCausalLM
 
 def get_pdf_text(pdf_docs):
     text = ""
@@ -46,8 +47,11 @@ def generate_response(context, query, tokenizer, model):
 class PDFChatBot:
     def __init__(self):
         self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-        self.tokenizer = T5Tokenizer.from_pretrained('t5-small')
-        self.generation_model = T5ForConditionalGeneration.from_pretrained('t5-small')
+        #self.tokenizer = T5Tokenizer.from_pretrained('t5-small')
+        #self.generation_model = T5ForConditionalGeneration.from_pretrained('t5-small')
+        # Load the LLaMA 2 tokenizer and model
+        self.tokenizer = LlamaTokenizer.from_pretrained('meta-llama/Llama-3.2-1B-Instruct')
+        self.generation_model = LlamaForCausalLM.from_pretrained('meta-llama/Llama-3.2-1B-Instruct')
         self.index = None
         self.embeddings = None
         self.text_chunks = None
