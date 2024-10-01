@@ -5,7 +5,6 @@ import faiss
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 import torch
 
-
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf_content in pdf_docs:
@@ -47,11 +46,10 @@ def generate_response(context, query, tokenizer, model):
 class PDFChatBot:
     def __init__(self):
         self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-        #self.tokenizer = T5Tokenizer.from_pretrained('t5-small')
-        #self.generation_model = T5ForConditionalGeneration.from_pretrained('t5-small')
-        # Load the tokenizer and model
-        tokenizer = T5Tokenizer.from_pretrained('google/flan-t5-small')
-        model = T5ForConditionalGeneration.from_pretrained('google/flan-t5-small')
+        
+        # Load the tokenizer and model as instance variables
+        self.tokenizer = T5Tokenizer.from_pretrained('google/flan-t5-small')
+        self.generation_model = T5ForConditionalGeneration.from_pretrained('google/flan-t5-small')
 
         self.index = None
         self.embeddings = None
@@ -66,3 +64,4 @@ class PDFChatBot:
         context, idx = get_relevant_chunk(question, self.index, self.text_chunks, self.embeddings, self.embedding_model)
         response = generate_response(context, question, self.tokenizer, self.generation_model)
         return response
+
